@@ -5,12 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pertemuan_12.model.Mahasiswa
 import com.example.pertemuan_12.repository.MahasiswaRepository
+import com.example.pertemuan_12.model.Mahasiswa
 import kotlinx.coroutines.launch
 
 class InsertViewModel(private val mhs: MahasiswaRepository) : ViewModel() {
-
     var uiState by mutableStateOf(InsertUiState())
         private set
 
@@ -22,7 +21,7 @@ class InsertViewModel(private val mhs: MahasiswaRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 mhs.insertMahasiswa(uiState.insertUiEvent.toMhs())
-            } catch (e: Exception) {
+            }catch (e:Exception){
                 e.printStackTrace()
             }
         }
@@ -30,18 +29,21 @@ class InsertViewModel(private val mhs: MahasiswaRepository) : ViewModel() {
 }
 
 data class InsertUiState(
-    val insertUiEvent: InsertUiEvent = InsertUiEvent()
+    val insertUiEvent : InsertUiEvent = InsertUiEvent(),
+    val error: String? = null
+
 )
 
 data class InsertUiEvent(
-    val nim: String = "",
-    val nama: String = "",
-    val alamat: String = "",
-    val jenisKelamin: String = "",
-    val kelas: String = "",
-    val angkatan: String = ""
+    val nim:String = "",
+    val nama:String = "",
+    val alamat:String = "",
+    val jenisKelamin:String = "",
+    val kelas:String = "",
+    val angkatan:String = "",
 )
-fun InsertUiEventtoMhs(): Mahasiswa = Mahasiswa(
+
+fun InsertUiEvent.toMhs():Mahasiswa = Mahasiswa(
     nim = nim,
     nama = nama,
     alamat = alamat,
@@ -54,7 +56,7 @@ fun Mahasiswa.toUiStateMhs(): InsertUiState = InsertUiState(
     insertUiEvent = toInsertUiEvent()
 )
 
-fun Mahasiswa.toInsertUiEvent(): InsertUiEvent = InsertUiEvent(
+fun Mahasiswa.toInsertUiEvent():InsertUiEvent = InsertUiEvent(
     nim = nim,
     nama = nama,
     alamat = alamat,
