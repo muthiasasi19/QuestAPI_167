@@ -1,11 +1,11 @@
 package com.example.pertemuan_12.ui.viewModel
 
-import android.net.http.HttpException
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.network.HttpException
 import com.example.pertemuan_12.model.Mahasiswa
 import com.example.pertemuan_12.repository.MahasiswaRepository
 import kotlinx.coroutines.launch
@@ -17,35 +17,34 @@ sealed class HomeUiState {
     object Loading : HomeUiState()
 }
 
-class HomeViewModel(private val mhs: MahasiswaRepository) : ViewModel() {
-
-
-    var mhsUIState: HomeUiState by mutableStateOf(HomeUiState.Loading)
+class HomeViewModel (private val mhs: MahasiswaRepository): ViewModel(){
+    var mhsUiState : HomeUiState by mutableStateOf(HomeUiState.Loading)
         private set
 
     init {
         getMhs()
     }
 
-    fun getMhs() {
+    fun getMhs(){
         viewModelScope.launch {
-            mhsUIState = HomeUiState.Loading
-            mhsUIState = try {
+            mhsUiState = HomeUiState.Loading
+            mhsUiState = try {
                 HomeUiState.Success(mhs.getMahasiswa())
-            } catch (e: IOException) {
+            }catch (e:Exception) {
                 HomeUiState.Error
-            } catch (e: HttpException) {
+            }catch (e:Exception) {
                 HomeUiState.Error
             }
         }
     }
-    fun deleteMhs(nim : String){
+
+    fun deleteMhs(nim:String) {
         viewModelScope.launch {
             try {
                 mhs.deleteMahasiswa(nim)
-            }catch (e : IOException){
+            }catch(e:IOException){
                 HomeUiState.Error
-            }catch (e : HttpException){
+            }catch (e:HttpException) {
                 HomeUiState.Error
             }
         }

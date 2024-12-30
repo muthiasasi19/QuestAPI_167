@@ -12,5 +12,7 @@ data class Mahasiswa(
     @SerialName("jenis_kelamin")
     val jenisKelamin: String,
     val kelas: String,
-    val angkatan: String,
-)
+    val angkatan: String
+) {
+
+}
